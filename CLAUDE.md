@@ -49,12 +49,19 @@ SongwriterAgent/
    - 默认中文歌词（除非我明确说英文或双语）
    - 主动问我：风格倾向、参考歌手、情绪、节奏、长度
 3. 我满意后保存 `v1_lyrics.txt` 和 `v1_style.txt`
-4. **提交 Suno 前再让我确认一次最终歌词和风格**
-5. 运行 `python suno.py submit --lyrics-file songs/<主题>/v1_lyrics.txt --style-file songs/<主题>/v1_style.txt`
-6. 拿到 job_id，等几十秒（不要忙轮询，间隔 15-30 秒）
-7. `python suno.py status <job_id>` 检查
-8. 完成后 `python suno.py download <job_id> --out songs/<主题>/v1.mp3`
-9. 在 `notes.md` 追加一段：版本号、提交时间、提示词摘要、我的反馈（先留空）
+4. 输出"待贴入 Suno"的内容块，格式如下：
+
+   **【Style】**（复制到 Suno Custom 模式的 Style 框）
+   <v1_style.txt 内容>
+
+   **【Lyrics】**（复制到 Suno Custom 模式的 Lyrics 框）
+   <v1_lyrics.txt 内容>
+
+5. 我自己去 suno.com 的 Custom 模式粘贴并生成
+6. 我听完后回来给反馈，或者说"定稿了"
+7. 在 `notes.md` 追加：版本号、提示词摘要、我的反馈（先留空）
+
+> ⚠️ 当前阶段跳过 `suno.py submit/status/download`，等接入真实 API 后恢复。
 
 ### 当我说"改 v2 副歌"或类似修订请求时
 
@@ -63,7 +70,7 @@ SongwriterAgent/
 3. 简要 diff 给我看："副歌第二行：'X' → 'Y'"
 4. 创建**新版本**文件 `v3_lyrics.txt`（不覆盖 v2）
 5. 风格如果不变就复制 `v2_style.txt` 到 `v3_style.txt`
-6. 提交 Suno 流程同上
+6. 输出"待贴入 Suno"内容块（同上第 4 步格式），等我确认后自己去贴
 
 ### 当我说"切到 X"或"看看 Y"时
 
@@ -107,7 +114,7 @@ SongwriterAgent/
 - **硬要求**：押韵和口语感优先于辞藻华丽；每句能念出来、不拗口
 
 **5. 提交 Suno**
-- 回到根"工作流"第 4 步（提交前确认 → submit → status → download）
+- 输出"待贴入 Suno"内容块，我手动去网页贴
 
 ### 歌词六型（每首选 1-2 型为主，混搭要讲清主次）
 
@@ -137,7 +144,7 @@ Suno 的 style 字段建议：
 
 ⚠️ **Suno 官方目前没有公开 API**。市面上的 "Suno API" 都是第三方包装（sunoapi.org / PiAPI / acedata 等）。
 
-- 现状：`suno.py` 是 stub 实现，只生成占位文件
+- 现状：`suno.py` 是 stub 实现，暂时跳过不用
 - 接入真实服务前我会确认用哪家
 - 接入时只改 `suno.py` 的内部实现，命令行接口保持不变
 - API key 走环境变量 `SUNO_API_KEY`
@@ -147,7 +154,7 @@ Suno 的 style 字段建议：
 ### 你应该
 - 主动询问：风格、情绪、参考、长度，缺信息别瞎写
 - 写词时保持人味，不要 AI 套话
-- 每个 Suno 提交前**强制让我确认**（防止误提交浪费配额）
+- 每次输出"待贴入 Suno"内容块前再让我确认一次（防止我还没改好就去贴）
 - 重要操作前简要说明你要做什么
 - 中文交流为主，技术内容可中英混
 
@@ -169,6 +176,7 @@ Suno 的 style 字段建议：
 
 - [x] 项目骨架搭好
 - [x] suno.py stub 可用
+- [x] 工作流调整：当前阶段手动贴 Suno 网页，跳过 API
 - [ ] 接入真实 Suno API（待定哪家服务）
 - [ ] 第一首歌
 
