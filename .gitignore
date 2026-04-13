@@ -1,0 +1,6 @@
+.env
+.suno_jobs.json
+__pycache__/
+*.pyc
+.venv/
+ 
