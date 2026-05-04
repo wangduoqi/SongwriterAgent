@@ -20,13 +20,17 @@ SongwriterAgent/
 ├── .gitignore
 ├── templates/                 # 创作流程模板（内容创作题材用）
 │   ├── research_prompt.md     # 素材调研 & 粘贴区
-│   ├── style_brief.md         # 风格决策（六型 + Suno 拼装）
+│   ├── mood_brief.md          # 基调决策（情绪 + 视角 + 时间立足点）
+│   ├── style_brief.md         # 风格 + 结构决策（流派速选 + 结构变体）
+│   ├── hook_brief.md          # 抓手决策（概念 hook + 副歌 hook）
 │   └── lyrics_prompt.md       # 歌词结构 & 硬约束
 ├── songs/                     # 所有歌曲
 │   └── <主题>/                # 每首歌一个文件夹，名字用主题
 │       ├── research.md        # 内容创作题材：素材整理
-│       ├── key_points.md      # 内容创作题材：冲突/意象/hook 抽取
-│       ├── brief.md           # 内容创作题材：风格决策记录
+│       ├── key_points.md      # 内容创作题材：冲突 / 意象抽取
+│       ├── mood.md            # 内容创作题材：基调决策记录
+│       ├── brief.md           # 内容创作题材：风格 + 结构决策记录
+│       ├── hook.md            # 内容创作题材：抓手决策记录
 │       ├── v1_lyrics.txt
 │       ├── v1_style.txt
 │       ├── v1.mp3
@@ -99,21 +103,34 @@ SongwriterAgent/
 - 整理到 `songs/<主题>/research.md`，保留关键原文引用（方便我核对）
 
 **2. 关键信息抽取**
-- 从 research.md 里挑：1 个核心冲突 / 3-5 个可入词意象 / 1 个情感锚点 / 1 句副歌 hook 候选
+- 从 research.md 里挑：1 个核心冲突 / 3-5 个可入词意象 / 1 个情感锚点
 - 存 `songs/<主题>/key_points.md`
 - 跟我确认抽取对不对，别自作主张定调
+- 注：副歌 hook 不在这一步定，留到第 5 步专门处理
 
-**3. 风格决策**
-- 打开 `templates/style_brief.md`，跟我走一遍决策清单
-- 产出：`songs/<主题>/v1_style.txt`（Suno 字段，≤200 字符）+ `songs/<主题>/brief.md`（决策记录）
+**3. 基调定调（mood）** ← 决定整首歌的情绪坐标
+- 走 `templates/mood_brief.md` 五个维度（情绪主色 / 能量曲线 / 视角人称 / 时间立足点 / 听完留下什么）
+- 产出 `songs/<主题>/mood.md`
+- **关键问题先答**："听完的人会留下什么感受？"——这条决定其他四条的取舍
 
-**4. 歌词创作**
+**4. 风格 + 结构选择**
+- 走 `templates/style_brief.md`
+- 从 8 个流派速选表挑 1 个为主，再选结构变体（完整型 / 省 PC2 型 / 极简型 等）
+- 产出：`songs/<主题>/brief.md`（决策记录）+ `songs/<主题>/v1_style.txt`（Suno 字段，≤200 字符）
+
+**5. Hook 先行** ← 钉死抓手再写 verse
+- 走 `templates/hook_brief.md`
+- 概念 hook（视角创意 / 锚点物件）+ 副歌 hook（至少 2 句候选给我选）
+- 产出 `songs/<主题>/hook.md`
+- **硬规则：我没确认 hook 之前不要进歌词**。hook 不够打动人，verse 再好也救不回来
+
+**6. 歌词创作**
 - 按 `templates/lyrics_prompt.md` 结构写
 - **至少两个版本**，不同歌词类型组合（见下），让我挑
 - 独立文件：`v1_lyrics.txt`、`v2_lyrics.txt`…
 - **硬要求**：押韵和口语感优先于辞藻华丽；每句能念出来、不拗口；押韵卡住时允许用少量英文 / 其他语言短语辅助，主体保持中文
 
-**5. 提交 Suno**
+**7. 提交 Suno**
 - 输出"待贴入 Suno"内容块，我手动去网页贴
 
 ### 歌词六型（每首选 1-2 型为主，混搭要讲清主次）
@@ -187,6 +204,8 @@ Suno 的 style 字段建议：
 - 包括：流派 + 人声特征 + 乐器 + 年代/情绪
 - 例：`city pop, mellow female vocal, warm synths, electric piano, 1980s Tokyo, nostalgic`
 - 中文歌可以用：`Mandopop ballad, female vocal, piano-led, emotional, modern production`
+
+**Suno 能力的强弱项参考**：选流派 / BPM / 人声前先看 `templates/ai_friendliness.md`——里面是 Suno 当前版本（v4.5/v5）的强弱项分级和实战发现日志。**这是时间快照，不是永恒真理**——Suno 每隔几个月有大版本升级，曾经的弱项可能变强项。每 3-6 个月 Duoqi 触发一次复审（参考文件末尾的复审清单）。每次实战中发现表中预期与实际不符，立刻在「实战发现日志」追加一条，**不要删改主表**。
 
 ## Suno API 注意事项
 
